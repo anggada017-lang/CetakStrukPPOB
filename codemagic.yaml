@@ -1,34 +1,30 @@
 workflows:
   android-debug:
-    name: CetakStrukPPOB V3 Share Receiver
+    name: CetakStrukPPOB V5 Auto Printer
     max_build_duration: 60
     environment:
       java: 17
     scripts:
-      - name: Extract V3 project ZIP
+      - name: Extract V5 project ZIP
         script: |
           set -eu
           rm -rf _project
           mkdir -p _project
 
-          ZIP_FILE="$(find . -maxdepth 1 -type f -iname 'CetakStrukPPOB_v3_ShareReceiver.zip' -print -quit || true)"
-          if [ -z "$ZIP_FILE" ]; then
-            ZIP_FILE="$(find . -maxdepth 1 -type f -iname '*.zip' -print -quit || true)"
-          fi
+          ZIP_FILE="CetakStrukPPOB_v5_AutoPrinter_TokenBesar_SimpanToko.zip"
 
-          if [ -z "$ZIP_FILE" ]; then
-            echo "ERROR: Tidak ditemukan file ZIP di folder utama repository."
-            echo "Unggah CetakStrukPPOB_v3_ShareReceiver.zip ke root repository GitHub."
+          if [ ! -f "$ZIP_FILE" ]; then
+            echo "ERROR: File ZIP V5 tidak ditemukan di root repository."
             exit 1
           fi
 
-          echo "Mengekstrak file: $ZIP_FILE"
+          echo "Mengekstrak file V5: $ZIP_FILE"
           unzip -q "$ZIP_FILE" -d _project
 
           SETTINGS_FILE="$(find _project -type f \( -name settings.gradle.kts -o -name settings.gradle \) -print -quit)"
+
           if [ -z "$SETTINGS_FILE" ]; then
-            echo "ERROR: ZIP berhasil dibuka, tetapi settings.gradle(.kts) tidak ditemukan."
-            echo "Periksa bahwa ZIP V3 berisi folder proyek Android."
+            echo "ERROR: settings.gradle(.kts) tidak ditemukan dalam ZIP V5."
             exit 1
           fi
 
